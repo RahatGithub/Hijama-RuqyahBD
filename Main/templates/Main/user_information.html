@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+{% block title %}Personal Information{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h5 class="text-primary">*** আপনার তথ্য প্রদান করুন। এপয়েন্টমেন্ট এর জন্য আবেদন করলে আপনার সাথে যোগাযোগ করা হবে</h5>
+    <form action="/user-information/" method="POST" style="display: inline;"> 
+      {% csrf_token %}
+        <div class="form-group">
+          <label for="name">আপনার নাম:</label>
+          <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="form-group">
+          <label for="phone">আপনার মোবাইল নম্বর:</label>
+          <input type="text" class="form-control" id="phone" name="phone">
+        </div>
+        <div class="form-group form-check">
+          <input type="checkbox" class="form-check-input" id="has-whatsapp" name="has-whatsapp">
+          <label class="form-check-label" for="has-whatsapp">এই নম্বরে Whatsapp থাকলে টিক দিন</label>
+        </div>
+        <div class="form-group">
+          <label for="address">আপনার ঠিকানা:</label>
+          <input type="text" class="form-control" id="address" name="address">
+        </div>
+        <!-- this is a hidden input field to track 'service' -->
+        <input type="hidden" class="form-control" id="service" name="service" value="{{request.GET.service}}">
+        <button type="submit" class="btn btn-primary">পরবর্তী ধাপে যান</button>
+      </form>
+</div>
+{% endblock %}
