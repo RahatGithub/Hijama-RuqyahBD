@@ -20,7 +20,7 @@ class User(BaseModel):
 class Appointment(BaseModel):
     # Foreign key to the User model
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
-
+    
     # Non-negative integer for service (can use choices to represent different services)
     HIJAMA = 1
     RUQYAH = 2

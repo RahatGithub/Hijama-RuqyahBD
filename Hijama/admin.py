@@ -4,7 +4,7 @@ from Main.models import User
 
 @admin.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):
-    list_display = ('user_info', 'age', 'gender', 'has_diabetes', 'blood_pressure', 'health_issues')
+    list_display = ('user_info', 'appointment', 'age', 'gender', 'has_diabetes', 'blood_pressure', 'health_issues')
 
     # Custom method to display user ID and name
     def user_info(self, obj):

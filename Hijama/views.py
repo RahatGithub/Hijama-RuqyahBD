@@ -28,4 +28,4 @@ class Assessment(View):
         
         print('assessment id: ', assessment.id)
 
-        return redirect(f'/book-appointment?user={user_id}&service={1}')
+        return redirect(f'/book-appointment?user={user_id}&service={1}&assessment={assessment.id}')

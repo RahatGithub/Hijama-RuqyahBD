@@ -1,5 +1,5 @@
 from django.db import models
-from Main.models import User
+from Main.models import User, Appointment
 
 # Models that inherit this, will have the below attributes/methods in common
 class BaseModel(models.Model):
@@ -14,6 +14,7 @@ class BaseModel(models.Model):
 
 class Assessment(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hijama_assessments')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='assessments', null=True, blank=True)
     age = models.IntegerField() 
     
     # Integer for gender (can use choices to represent different genders)

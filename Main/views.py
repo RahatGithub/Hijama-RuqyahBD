@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
+from Hijama.models import Assessment as HijamaAssessment
 
 class Index(View):
     def get(self, request):
@@ -17,6 +18,7 @@ class BookAppointment(View):
     def get(self, request):
         user_id = int(request.GET.get('user'))
         service = int(request.GET.get('service'))
+        assessment_id = int(request.GET.get('assessment'))
 
         # fetch the user
         user = User.objects.get(id=user_id)        
@@ -24,6 +26,18 @@ class BookAppointment(View):
         # create new appointment
         appointment = Appointment(user=user, service=service, status=0, date="2024-11-26", time="14:00:00")
         appointment.save() 
+
+        if service == 1: #if the service is Hijama:
+            assessment = HijamaAssessment.objects.get(id=assessment_id)
+        # elif service == 2: #if the service is Ruqyah:
+        #     assessment = RuqyahAssessment.objects.get(id=assessment_id)
+        # elif service in [31, 32]: #if the service is Counseling:
+        #     assessment = CounselingAssessment.objects.get(id=assessment_id)
+        # elif service in [41, 42]: #if the service is Assessment:
+        #     assessment = Assessment.objects.get(id=assessment_id)
+
+        assessment.appointment = appointment
+        assessment.save()
 
         return render(request, 'Main/appointment_request_success.html')
 
