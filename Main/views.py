@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 from .models import *
 from Hijama.models import Assessment as HijamaAssessment
+from Ruqyah.models import Assessment as RuqyahAssessment
+from Counseling.models import Assessment as CounselingAssessment
+from Assessment.models import Assessment as UsualAssessment
 
 class Index(View):
     def get(self, request):
@@ -24,17 +27,17 @@ class BookAppointment(View):
         user = User.objects.get(id=user_id)        
 
         # create new appointment
-        appointment = Appointment(user=user, service=service, status=0, date="2024-11-26", time="14:00:00")
+        appointment = Appointment(user=user, service=service, status=0)
         appointment.save() 
 
         if service == 1: #if the service is Hijama:
             assessment = HijamaAssessment.objects.get(id=assessment_id)
-        # elif service == 2: #if the service is Ruqyah:
-        #     assessment = RuqyahAssessment.objects.get(id=assessment_id)
-        # elif service in [31, 32]: #if the service is Counseling:
-        #     assessment = CounselingAssessment.objects.get(id=assessment_id)
-        # elif service in [41, 42]: #if the service is Assessment:
-        #     assessment = Assessment.objects.get(id=assessment_id)
+        elif service == 2: #if the service is Ruqyah:
+            assessment = RuqyahAssessment.objects.get(id=assessment_id)
+        elif service in [31, 32]: #if the service is Counseling:
+            assessment = CounselingAssessment.objects.get(id=assessment_id)
+        elif service in [41, 42]: #if the service is Assessment:
+            assessment = UsualAssessment.objects.get(id=assessment_id)
 
         assessment.appointment = appointment
         assessment.save()
@@ -52,6 +55,7 @@ class UserInformation(View):
         has_whatsapp = request.POST.get('has-whatsapp') == 'on'
         address = request.POST.get('address')
         service = request.POST.get('service')
+        appointment_type = request.POST.get('appointment-type')
 
         # Check if the user already exists
         user = User.objects.filter(name=name,phone=phone).first()
@@ -61,5 +65,7 @@ class UserInformation(View):
             user = User(name=name, phone=phone, has_whatsapp=has_whatsapp, address=address)
             user.save()
 
+        print('service', service)
+
         # Redirect with the user ID and other details
-        return redirect(f'/{service}/assessment?user={user.id}')
+        return redirect(f'/{service}/assessment?user={user.id}&appointment_type={appointment_type}')

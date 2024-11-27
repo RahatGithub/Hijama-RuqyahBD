@@ -23,9 +23,14 @@ class Assessment(View):
         user = User.objects.get(id=user_id)        
 
         # create new assessment
-        assessment = HijamaAssessment(user=user, age=age, gender=gender, has_diabetes=has_diabetes, blood_pressure=blood_pressure, health_issues=health_issues)
+        assessment = HijamaAssessment(
+            user=user, 
+            age=age, 
+            gender=gender, 
+            has_diabetes=has_diabetes, 
+            blood_pressure=blood_pressure, 
+            health_issues=health_issues
+        )
         assessment.save()
-        
-        print('assessment id: ', assessment.id)
 
         return redirect(f'/book-appointment?user={user_id}&service={1}&assessment={assessment.id}')

@@ -13,8 +13,8 @@ class BaseModel(models.Model):
 
 
 class Assessment(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hijama_assessments')
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='assessments', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hijama_assessments_user')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='hijama_assessments_appointment', null=True, blank=True)
     age = models.IntegerField() 
     
     # Integer for gender (can use choices to represent different genders)
@@ -50,4 +50,5 @@ class Assessment(BaseModel):
     ]
     blood_pressure = models.IntegerField(choices=BLOODPRESSURE_CHOICES, default=NORMAL)
 
-    health_issues = models.TextField(default='')
+    health_issues = models.TextField(default='') 
+    comments = models.TextField(default='') 

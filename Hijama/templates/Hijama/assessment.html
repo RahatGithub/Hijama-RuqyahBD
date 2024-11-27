@@ -8,7 +8,8 @@
     <form action="" method="POST" style="display: inline;">
       {% csrf_token %}
         <input type="hidden" id="user" name="user" value="{{request.GET.user}}">
-        <input type="hidden" id="service" name="service" value=1>
+        <input type="hidden" id="appointment-type" name="appointment-type" value="{{request.GET.appointment_type}}">
+        {% comment %} <input type="hidden" id="service" name="service" value=1> {% endcomment %}
         <div class="form-group">
           <label for="age">আপনার বয়স:</label>
           <input type="number" class="form-control" id="age" name="age">

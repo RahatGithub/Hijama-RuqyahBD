@@ -1,0 +1,31 @@
+{% extends "base.html" %} 
+
+{% block title %}Assessment{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h5 class="text-danger">***this is a dummy assessment form</h5>
+    <form action="" method="POST" style="display: inline;">
+      {% csrf_token %}
+        <input type="hidden" id="user" name="user" value="{{request.GET.user}}">
+        <input type="hidden" id="appointment-type" name="appointment-type" value="{{request.GET.appointment_type}}">
+        <div class="form-group">
+          <label for="age">আপনার বয়স:</label>
+          <input type="number" class="form-control" id="age" name="age">
+        </div>
+        <div class="form-group">
+          <label for="gender">আপনার লিঙ্গঃ</label>
+          <select class="form-control" id="gender" name="gender" required>
+              <option value="" disabled selected>---নির্বাচন করুন---</option>
+              <option value=1>পুরুষ</option>
+              <option value=0>মহিলা</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reason">কি অসুবিধার কারণে কাউন্সেলিং চাচ্ছেন তা সংক্ষেপে লিখুন</label>
+          <textarea class="form-control" id="reason" name="reason" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">এপয়েন্টমেন্টের জন্য আবেদন করুন</button>
+      </form>
+</div>
+{% endblock %}

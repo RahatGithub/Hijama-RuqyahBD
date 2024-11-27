@@ -52,11 +52,11 @@ class Appointment(BaseModel):
     status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)
 
     # Date and time fields
-    date = models.DateField()
-    time = models.TimeField()
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
 
     def __str__(self):
         return f'Appointment #{self.id} for {self.user.name}'
 
     class Meta:
-        ordering = ['-date', '-time']  # Recent appointments appear first
+        ordering = ['-created_at', '-updated_at']  # Recent appointments appear first
