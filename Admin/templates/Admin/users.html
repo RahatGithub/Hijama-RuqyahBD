@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Clients{% endblock %}
+
+
+{% block body %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Clients</h2>
+    <!-- Search Form -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="GET" action="{% url 'search_users' %}" class="form-inline">
+                <input 
+                    type="text" 
+                    name="query" 
+                    class="form-control mr-sm-2" 
+                    placeholder="Search users by name or phone" 
+                    required>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Has WhatsApp</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.has_whatsapp|yesno:"Yes,No" }}</td>
+                            <td>{{ user.address }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No users found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

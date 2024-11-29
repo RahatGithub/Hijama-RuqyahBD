@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{appointment_query_type}} appointments{% endblock %}
+
+{% block css %}
+<style>
+    .table-container {
+        max-height: 90vh; /* Adjust height to almost full page */
+        overflow: hidden;
+    }
+    .table-wrapper {
+        overflow-y: auto;
+        max-height: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="my-4">
+    <div class="container">
+        <h2 class="text-center mb-4">{{appointment_query_type}} Appointments</h2>
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Client Name</th>
+                            <th>Phone</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Service</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ appointment.user.name }}</td>
+                            <td>{{ appointment.user.phone }}</td>
+                            <td>{{ appointment.date }}</td>
+                            <td>{{ appointment.time }}</td>
+                            <td>{{ appointment.service }}</td>
+                            <td>
+                                {% if url_query == 'pending' %}
+                                    <!-- Approve Form -->
+                                    <form action="/admin/appointments/approve/" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" id="appointment_id" name="appointment_id" value={{appointment.id}}>
+                                        <input type="hidden" class="form-control" id="url_query" name="url_query" value="{{url_query}}">
+                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                    </form>
+                            
+                                    <!-- Cancel Form -->
+                                    <form action="/admin/appointments/cancel/" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" id="appointment_id" name="appointment_id" value={{appointment.id}}>
+                                        <input type="hidden" class="form-control" id="url_query" name="url_query" value="{{url_query}}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                    </form>
+                                {% elif url_query == 'upcoming' %}
+                                    <!-- Attend Form -->
+                                    <form action="/admin/appointments/attend/" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" id="appointment_id" name="appointment_id" value={{appointment.id}}>
+                                        <input type="hidden" class="form-control" id="url_query" name="url_query" value="{{url_query}}">
+                                        <button type="submit" class="btn btn-sm btn-info">Attend</button>
+                                    </form>
+                            
+                                    <!-- Cancel Form -->
+                                    <form action="/admin/appointments/cancel/" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" id="appointment_id" name="appointment_id" value={{appointment.id}}>
+                                        <input type="hidden" class="form-control" id="url_query" name="url_query" value="{{url_query}}">
+                                        <button type="submit" class="btn btn-sm btn-danger">Cancel/Missed</button>
+                                    </form>
+                                {% elif url_query == 'history' %}
+                                    {% if appointment.status == 2 %} <span class="text-success">Attended</span> {% endif %}
+                                    {% if appointment.status == -1 %} <span class="text-danger">Cancelled</span> {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">0 {{appointment_query_type}} appointments</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

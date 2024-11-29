@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous" defer></script>
-</head>
+    <style>{% block css %} <!--custom css of the child template--> {% endblock %}</style>
+  </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Hijama & Ruqyah BD</a>
@@ -44,6 +45,34 @@
           </ul>
         </div>
     </nav>
+
+    {% if request.user.is_superuser %}
+    <nav class="text-center  my-2 bg-light">
+      <div class="row justify-content-center">
+          <!-- Users Button -->
+          <div class="col-md-2 d-flex">
+              <a href="/admin/users" class="btn btn-outline-primary btn-block btn-lg mb-3 align-self-stretch">Clients</a>
+          </div>
+          <!-- Upcoming Appointments Button -->
+          <div class="col-md-2 d-flex">
+              <a href="/admin/appointments/?type=upcoming" class="btn btn-outline-success btn-block btn-lg mb-3 align-self-stretch">Upcoming Appointments</a>
+          </div>
+          <!-- Pending Appointments Button -->
+          <div class="col-md-2 d-flex">
+              <a href="/admin/appointments/?type=pending" class="btn btn-outline-warning btn-block btn-lg mb-3 align-self-stretch">Appointment Requests</a>
+          </div>
+          <!-- Appointment History Button -->
+          <div class="col-md-2 d-flex">
+              <a href="/admin/appointments/?type=history" class="btn btn-outline-secondary btn-block btn-lg mb-3 align-self-stretch">Appointment History</a>
+          </div>
+          <!-- All Assessments Button -->
+          <div class="col-md-2 d-flex">
+              <a href="/assessments/" class="btn btn-outline-info btn-block btn-lg mb-3 align-self-stretch">All Assessments</a>
+          </div>
+      </div>
+    </nav>
+    {% endif %}
+
     {% block body %}
     <!-- Dynamic body from child template -->
     {% endblock %}
