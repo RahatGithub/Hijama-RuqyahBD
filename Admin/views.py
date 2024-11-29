@@ -5,12 +5,10 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from Main.models import User, Appointment
-
-
-class DashboardView(View):
-    def get(self, request):
-        # we need to call all data from db, for the dashboard here
-        return render(request, 'Admin/dashboard.html')
+from Assessment.models import Assessment as NormalAssessment
+from Hijama.models import Assessment as HijamaAssessment
+from Ruqyah.models import Assessment as RuqyahAssessment
+from Counseling.models import Assessment as CounselingAssessment
 
 
 # View All Users: Display all users on a separate page
@@ -40,12 +38,12 @@ class UserSearchView(ListView):
 # List all upcoming or requested appointments (0: requested, 1: upcoming)
 class SelectiveAppointmentsView(View):
     SERVICE_MAP = {
-                1: "Hijama",
-                2: "Ruqyah",
-                31: "Counseling Live",
-                32: "Counseling Online",
-                41: "Assessment Live",
-                42: "Assessment Online",
+        1: "Hijama",
+        2: "Ruqyah",
+        31: "Counseling Live",
+        32: "Counseling Online",
+        41: "Assessment Live",
+        42: "Assessment Online",
     }
 
     def get(self, request):
@@ -112,3 +110,136 @@ class CancelAppointmentView(View):
             return redirect(f'/admin/appointments/?type={url_query}') # SHOW A SUCCESS MESSAGE (TOAST/POPUP)
         except Appointment.DoesNotExist:
             return redirect(f'/admin/appointments/?type={url_query}')  # SHOW ERROR MESSAGE (TOAST/POPUP)
+
+
+# List all normal assessments
+class NormalAssessmentsView(View):
+    GENDER_MAP = {
+        1: "Male",
+        0: "Female",
+    }
+
+    def get(self, request):
+        data = NormalAssessment.objects.all()
+
+        # Make custom appointments object to be used in the template
+        assessments = []
+        for a in data:
+            assessment = dict()
+            assessment['id'] = a.id 
+            assessment['user'] = a.user
+            assessment['appointment'] = a.appointment
+            assessment['age'] = a.age
+            assessment['gender'] = self.GENDER_MAP.get(a.gender)
+            assessment['reason'] = a.reason 
+            assessment['comments'] = a.comments 
+            assessments.append(assessment)
+
+        return render(request, 'Admin/normal_assessment_data.html', {'assessments': assessments})
+    
+
+# List all hijama assessments
+class HijamaAssessmentsView(View):
+    GENDER_MAP = {
+        1: "Male",
+        0: "Female",
+    }
+    HAS_DIABETES_MAP = {
+        1: "Yes",
+        0: "No",
+        -1: "Unaware"
+    }
+    BLOOD_PRESSURE_MAP = {
+        0: "Normal",
+        1: "Low",
+        2: "High",
+        -1: "Unaware"
+    }
+
+    def get(self, request):
+        data = HijamaAssessment.objects.all()
+
+        # Make custom appointments object to be used in the template
+        assessments = []
+        for a in data:
+            assessment = dict()
+            assessment['id'] = a.id 
+            assessment['user'] = a.user
+            assessment['appointment'] = a.appointment
+            assessment['age'] = a.age
+            assessment['gender'] = self.GENDER_MAP.get(a.gender)
+            assessment['has_diabetes'] = self.HAS_DIABETES_MAP.get(a.has_diabetes)
+            assessment['blood_pressure'] = self.BLOOD_PRESSURE_MAP.get(a.blood_pressure)
+            assessment['health_issues'] = a.health_issues
+            assessment['comments'] = a.comments 
+            assessments.append(assessment)
+
+        return render(request, 'Admin/hijama_assessment_data.html', {'assessments': assessments})
+    
+# List all ruqyah assessments
+class RuqyahAssessmentsView(View):
+    GENDER_MAP = {
+        1: "Male",
+        0: "Female",
+    }
+    HAS_DIABETES_MAP = {
+        1: "Yes",
+        0: "No",
+        -1: "Unaware"
+    }
+    BLOOD_PRESSURE_MAP = {
+        0: "Normal",
+        1: "Low",
+        2: "High",
+        -1: "Unaware"
+    }
+
+    def get(self, request):
+        data = RuqyahAssessment.objects.all()
+
+        # Make custom appointments object to be used in the template
+        assessments = []
+        for a in data:
+            assessment = dict()
+            assessment['id'] = a.id 
+            assessment['user'] = a.user
+            assessment['appointment'] = a.appointment
+            assessment['age'] = a.age
+            assessment['gender'] = self.GENDER_MAP.get(a.gender)
+            assessment['has_diabetes'] = self.HAS_DIABETES_MAP.get(a.has_diabetes)
+            assessment['blood_pressure'] = self.BLOOD_PRESSURE_MAP.get(a.blood_pressure)
+            assessment['health_issues'] = a.health_issues
+            assessment['bad_dreams'] = a.bad_dreams
+            assessment['anxiety'] = a.anxiety
+            assessment['disappointment'] = a.disappointment
+            assessment['tension'] = a.tension
+            assessment['comments'] = a.comments 
+            assessments.append(assessment)
+
+        return render(request, 'Admin/ruqyah_assessment_data.html', {'assessments': assessments})
+    
+
+# List all counseling assessments
+class CounselingAssessmentsView(View):
+    GENDER_MAP = {
+        1: "Male",
+        0: "Female",
+    }
+
+    def get(self, request):
+        data = CounselingAssessment.objects.all()
+
+        # Make custom appointments object to be used in the template
+        assessments = []
+        for a in data:
+            assessment = dict()
+            assessment['id'] = a.id 
+            assessment['user'] = a.user
+            assessment['appointment'] = a.appointment
+            assessment['age'] = a.age
+            assessment['gender'] = self.GENDER_MAP.get(a.gender)
+            assessment['reason'] = a.reason 
+            assessment['comments'] = a.comments 
+            assessments.append(assessment)
+
+        return render(request, 'Admin/counseling_assessment_data.html', {'assessments': assessments})

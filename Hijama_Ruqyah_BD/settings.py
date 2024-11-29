@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # Custom apps:
     'Main.apps.MainConfig',
     'Admin.apps.AdminConfig',
+    'Authentication.apps.AuthenticationConfig',
     'Hijama.apps.HijamaConfig',
     'Ruqyah.apps.RuqyahConfig',
     'Counseling.apps.CounselingConfig',
