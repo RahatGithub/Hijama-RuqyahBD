@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Access denied {% endblock %}
+
+
+<style>
+    {% block css %}
+    .access-section {
+        color: #fff; /* Default text color */
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .access-section h1 {
+        font-size: 6rem;
+        color: #dc3545; /* Red color for the text */
+    }
+    {% endblock %}
+</style>
+
+{% block body %} 
+<section class='access-section'>
+    <h1>Access Denied</h1>
+</section>
+{% endblock %}

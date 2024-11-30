@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Admin.middleware.admin_middleware.AdminRequiredMiddleware', #custom middleware for 'admin/' routes
 ]
 
 ROOT_URLCONF = 'Hijama_Ruqyah_BD.urls'
