@@ -58,8 +58,26 @@
                             <td>{{ appointment.id }}</td>
                             <td>{{ appointment.user.name }}</td>
                             <td>{{ appointment.user.phone }}</td>
-                            <td>{{ appointment.date }}</td>
-                            <td>{{ appointment.time }}</td>
+                            <td>
+                                {{ appointment.date }}
+                                {% if url_query == 'pending'  %}
+                                    <form method="POST" action="{% url 'set_appointment_date' appointment.id %}">
+                                        {% csrf_token %}
+                                        <input type="date" name="date" class="" required>
+                                        <button type="submit" class="btn btn-sm btn-info">Set date</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ appointment.time }}
+                                {% if url_query == 'pending'  %}
+                                    <form method="POST" action="{% url 'set_appointment_time' appointment.id %}">
+                                        {% csrf_token %}
+                                        <input type="time" name="time" class="" required>
+                                        <button type="submit" class="btn btn-sm btn-info">Set time</button>
+                                    </form>
+                                {% endif %}
+                            </td>
                             <td>{{ appointment.service }}</td>
                             <td>
                                 {% if url_query == 'pending' %}

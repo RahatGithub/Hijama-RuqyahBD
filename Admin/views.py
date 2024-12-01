@@ -88,7 +88,7 @@ class SelectiveAppointmentsView(View):
             data = Appointment.objects.filter(status=0).order_by('created_at')
             appointment_query_type = 'Pending'
         elif url_query == 'history':
-            data = Appointment.objects.filter(status__in=[2, -1]).order_by('created_at')
+            data = Appointment.objects.filter(status__in=[2, -1]).order_by('-created_at')
             appointment_query_type = 'History of'
 
         # Make custom appointments object to be used in the template

@@ -1,5 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .models import *
 from Hijama.models import Assessment as HijamaAssessment
@@ -43,6 +43,28 @@ class BookAppointment(View):
         assessment.save()
 
         return render(request, 'Main/appointment_request_success.html')
+
+
+class SetAppointmentDate(View):
+    def post(self, request, appointment_id):
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        date = request.POST.get("date")
+        if date:
+            appointment.date = date
+            appointment.save()
+            return redirect(request.META.get('HTTP_REFERER', '/'))  # Redirect back to the previous page
+        return HttpResponseBadRequest("Invalid date")
+    
+
+class SetAppointmentTime(View):
+    def post(self, request, appointment_id):
+        appointment = get_object_or_404(Appointment, id=appointment_id)
+        time = request.POST.get("time")
+        if time:
+            appointment.time = time 
+            appointment.save()
+            return redirect(request.META.get('HTTP_REFERER', '/'))  # Redirect back to the previous page
+        return HttpResponseBadRequest("Invalid time")
 
 
 class UserInformation(View):
