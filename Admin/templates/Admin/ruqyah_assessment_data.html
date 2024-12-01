@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Ruqyah assessment data{% endblock %}
+{% block title %}Ruqyah Assessment data{% endblock %}
 
 {% block css %}
 <style>
@@ -28,13 +28,14 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
-                            <th>Appointment</th>
+                            <th>Appointment ID</th>
                             <th>Client Name</th>
                             <th>Age</th>
                             <th>Gender</th>
-                            <th>Has diabetes</th>
-                            <th>Blood pressure</th>
-                            <th>Health issues</th>
+                            <th>Bad dreams</th>
+                            <th>Anxiety</th>
+                            <th>Dissappointment</th>
+                            <th>Tension</th>
                             <th>Comments</th>
                             <th>Actions</th>
                         </tr>
@@ -43,16 +44,17 @@
                         {% for assessment in assessments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td><a href="#">#</a></td>
+                            <td>{{ assessment.appointment.id }}</td>
                             <td>{{ assessment.user.name }}</td>
                             <td>{{ assessment.age }}</td>
                             <td>{{ assessment.gender }}</td>
-                            <td>{{ assessment.has_diabetes }}</td>
-                            <td>{{ assessment.blood_pressure }}</td>
-                            <td>{{ assessment.health_issues }}</td>
+                            <td>{{ assessment.bad_dreams }}</td>
+                            <td>{{ assessment.anxiety }}</td>
+                            <td>{{ assessment.disappointment }}</td>
+                            <td>{{ assessment.tension }}</td>
                             <td>{{ assessment.comments }}</td>
                             <td>
-                                
+                                <a href="/admin/assessments/ruqyah/{{assessment.id}}" class="btn btn-info">View</a>
                             </td>
                         </tr>
                         {% empty %}

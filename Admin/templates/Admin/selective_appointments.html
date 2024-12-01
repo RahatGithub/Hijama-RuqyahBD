@@ -19,12 +19,30 @@
 <section class="my-4">
     <div class="container">
         <h2 class="text-center mb-4">{{appointment_query_type}} Appointments</h2>
+        <!-- Search Form -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <form method="GET" action="{% url 'search_appointments' %}?type={{ url_query }}" class="form-inline">
+                    <input 
+                        type="text" 
+                        name="query" 
+                        class="form-control mr-sm-2" 
+                        placeholder="Name, phone or address" 
+                        required
+                    >
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Appointments Table -->
         <div class="table-container">
             <div class="table-wrapper">
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
+                            <th>Appointment ID</th>
                             <th>Client Name</th>
                             <th>Phone</th>
                             <th>Date</th>
@@ -37,6 +55,7 @@
                         {% for appointment in appointments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
+                            <td>{{ appointment.id }}</td>
                             <td>{{ appointment.user.name }}</td>
                             <td>{{ appointment.user.phone }}</td>
                             <td>{{ appointment.date }}</td>

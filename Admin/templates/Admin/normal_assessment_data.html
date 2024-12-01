@@ -28,7 +28,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
-                            <th>Appointment</th>
+                            <th>Appointment ID</th>
                             <th>Client Name</th>
                             <th>Age</th>
                             <th>Gender</th>
@@ -41,13 +41,14 @@
                         {% for assessment in assessments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td><a href="#">#</a></td>
+                            <td>{{assessment.appointment.id}}</td>
                             <td>{{ assessment.user.name }}</td>
                             <td>{{ assessment.age }}</td>
                             <td>{{ assessment.gender }}</td>
                             <td>{{ assessment.reason }}</td>
+                            <td>{{ assessment.comments }}</td>
                             <td>
-                                
+                                <a href="/admin/assessments/normal/{{assessment.id}}" class="btn btn-info">View</a>
                             </td>
                         </tr>
                         {% empty %}

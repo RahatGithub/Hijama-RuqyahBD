@@ -41,12 +41,12 @@ class Appointment(BaseModel):
     # Integer for status (can use choices to represent different statuses)
     PENDING = 0
     CONFIRMED = 1
-    CLOSED = 2
+    ATTENDED = 2
     CANCELLED = -1
     STATUS_CHOICES = [
         (PENDING, 'Pending'),
         (CONFIRMED, 'Confirmed'),
-        (CLOSED, 'Closed'),
+        (ATTENDED, 'Closed'),
         (CANCELLED, 'Cancelled'),
     ]
     status = models.IntegerField(choices=STATUS_CHOICES, default=PENDING)

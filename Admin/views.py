@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, UpdateView, DeleteView, ListView
 from django.views import View
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from Main.models import User, Appointment
@@ -9,6 +9,8 @@ from Assessment.models import Assessment as NormalAssessment
 from Hijama.models import Assessment as HijamaAssessment
 from Ruqyah.models import Assessment as RuqyahAssessment
 from Counseling.models import Assessment as CounselingAssessment
+from django.contrib import messages
+    
 
 
 # View All Users: Display all users on a separate page
@@ -17,16 +19,47 @@ class UserListView(ListView):
     template_name = "Admin/users.html"
     context_object_name = "users"
 
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation to get the original context
+    #     context = super().get_context_data(**kwargs)
+
+    #     # Process the user instances
+    #     custom_users = []
+    #     for user in context["users"]:
+            
+    #         normal_assessments = NormalAssessment.objects.filter(user=user.id)
+    #         hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
+    #         ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
+    #         counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
+            
+
+    #         custom_users.append({
+    #             "id": user.id,
+    #             "name": user.name,
+    #             "phone": user.phone,
+    #             "has_whatsapp": user.has_whatsapp,
+    #             "address": user.address,
+                
+    #         })
+
+    #     # Replace the users context with the processed users
+    #     context["users"] = processed_users
+
+    #     # Add any additional custom context if needed
+    #     context["custom_message"] = "This is a custom message."
+
+    #     return context
+
 
 # Search Users: Display search results based on query
 class UserSearchView(ListView):
     model = User
-    template_name = "search_results.html"
+    template_name = "Admin/user_search_results.html"
     context_object_name = "users"
 
     def get_queryset(self):
         query = self.request.GET.get("query", "")
-        return User.objects.filter(name__icontains=query) | User.objects.filter(phone__icontains=query)
+        return User.objects.filter(name__icontains=query) | User.objects.filter(phone__icontains=query) | User.objects.filter(address__icontains=query)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -112,6 +145,40 @@ class CancelAppointmentView(View):
             return redirect(f'/admin/appointments/?type={url_query}')  # SHOW ERROR MESSAGE (TOAST/POPUP)
 
 
+# Search Appointments: Display search results based on query
+class AppointmentSearchView(ListView):
+    model = Appointment
+    template_name = "Admin/appointment_search_results.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("query", "")
+        return Appointment.objects.filter(user__name__icontains=query) | Appointment.objects.filter(user__phone__icontains=query) | Appointment.objects.filter(user__address__icontains=query)
+
+    def get_context_data(self, **kwargs):
+        # Base context data
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get("query", "")
+
+        # Process custom appointment data
+        raw_appointments = self.get_queryset()  # Raw queryset
+        custom_appointments = []
+        for appointment in raw_appointments:
+            custom_appointments.append({
+                "id": appointment.id,
+                "user": appointment.user,
+                "service": appointment.get_service_display(), # Uses service choices for display
+                "status": appointment.get_status_display(),  # Uses status choices for display
+                "date": appointment.date,
+                "time": appointment.time,
+            })
+
+        # Add custom data to context
+        context["appointments"] = custom_appointments
+        context["query"] = query  # Include search query for template reference
+        return context
+
+
+
 # List all normal assessments
 class NormalAssessmentsView(View):
     GENDER_MAP = {
@@ -119,26 +186,65 @@ class NormalAssessmentsView(View):
         0: "Female",
     }
 
-    def get(self, request):
-        data = NormalAssessment.objects.all()
+    def get(self, request, assessment_id=None):
+        if assessment_id is None:
+            # List all assessments
+            data = NormalAssessment.objects.all()
 
-        # Make custom appointments object to be used in the template
-        assessments = []
-        for a in data:
-            assessment = dict()
-            assessment['id'] = a.id 
-            assessment['user'] = a.user
-            assessment['appointment'] = a.appointment
-            assessment['age'] = a.age
-            assessment['gender'] = self.GENDER_MAP.get(a.gender)
-            assessment['reason'] = a.reason 
-            assessment['comments'] = a.comments 
-            assessments.append(assessment)
+            # Prepare custom assessments data for the template
+            assessments = []
+            for a in data:
+                assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'reason': a.reason,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+                assessments.append(assessment)
 
-        return render(request, 'Admin/normal_assessment_data.html', {'assessments': assessments})
+            return render(request, 'Admin/normal_assessment_data.html', {'assessments': assessments})
+
+        else:
+            # Show details of a specific assessment
+            a = get_object_or_404(NormalAssessment, id=assessment_id)
+            assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'reason': a.reason,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+            return render(request, 'Admin/normal_assessment_single_view.html', {'assessment': assessment})
+
+    def post(self, request, assessment_id):
+        # Update a specific assessment
+        assessment = get_object_or_404(NormalAssessment, id=assessment_id)
+
+        # Get updated data from the form
+        reason = request.POST.get('reason', '').strip()
+        comments = request.POST.get('comments', '').strip()
+
+        if reason:
+            assessment.reason = reason
+        if comments:
+            assessment.comments = comments
+
+        # Save the updated assessment
+        assessment.save()
+        messages.success(request, "Assessment updated successfully!")
+
+        # Redirect back to the same assessment view
+        return redirect('normal_assessments', assessment_id=assessment.id)
     
 
-# List all hijama assessments
+
 class HijamaAssessmentsView(View):
     GENDER_MAP = {
         1: "Male",
@@ -156,27 +262,74 @@ class HijamaAssessmentsView(View):
         -1: "Unaware"
     }
 
-    def get(self, request):
-        data = HijamaAssessment.objects.all()
+    def get(self, request, assessment_id=None):
+        if assessment_id is None:
+            # List all assessments
+            data = HijamaAssessment.objects.all()
 
-        # Make custom appointments object to be used in the template
-        assessments = []
-        for a in data:
-            assessment = dict()
-            assessment['id'] = a.id 
-            assessment['user'] = a.user
-            assessment['appointment'] = a.appointment
-            assessment['age'] = a.age
-            assessment['gender'] = self.GENDER_MAP.get(a.gender)
-            assessment['has_diabetes'] = self.HAS_DIABETES_MAP.get(a.has_diabetes)
-            assessment['blood_pressure'] = self.BLOOD_PRESSURE_MAP.get(a.blood_pressure)
-            assessment['health_issues'] = a.health_issues
-            assessment['comments'] = a.comments 
-            assessments.append(assessment)
+            # Prepare custom assessments data for the template
+            assessments = []
+            for a in data:
+                assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'has_diabetes': self.HAS_DIABETES_MAP.get(a.has_diabetes),
+                    'blood_pressure': self.BLOOD_PRESSURE_MAP.get(a.blood_pressure),
+                    'health_issues': a.health_issues,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+                assessments.append(assessment)
 
-        return render(request, 'Admin/hijama_assessment_data.html', {'assessments': assessments})
+            return render(request, 'Admin/hijama_assessment_data.html', {'assessments': assessments})
+
+        else:
+            # Show details of a specific assessment
+            a = get_object_or_404(HijamaAssessment, id=assessment_id)
+            assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'has_diabetes': self.HAS_DIABETES_MAP.get(a.has_diabetes),
+                    'blood_pressure': self.BLOOD_PRESSURE_MAP.get(a.blood_pressure),
+                    'health_issues': a.health_issues,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+            return render(request, 'Admin/hijama_assessment_single_view.html', {'assessment': assessment})
+
+    def post(self, request, assessment_id):
+        # Update a specific assessment
+        assessment = get_object_or_404(HijamaAssessment, id=assessment_id)
+
+        # Get updated data from the form
+        age = request.POST.get('age')
+        has_diabetes = request.POST.get('has_diabetes')
+        blood_pressure = request.POST.get('blood_pressure')
+        health_issues = request.POST.get('health_issues', '').strip()
+        comments = request.POST.get('comments', '').strip()
+
+        # Update the record 
+        assessment.age = age
+        assessment.has_diabetes = has_diabetes
+        assessment.blood_pressure = blood_pressure
+        assessment.health_issues = health_issues
+        assessment.comments = comments
+
+        # Save the updated assessment
+        assessment.save()
+        messages.success(request, "Assessment updated successfully!")
+
+        # Redirect back to the same assessment view
+        return redirect('hijama_assessments', assessment_id=assessment.id)
+
     
-# List all ruqyah assessments
+
 class RuqyahAssessmentsView(View):
     GENDER_MAP = {
         1: "Male",
@@ -194,52 +347,143 @@ class RuqyahAssessmentsView(View):
         -1: "Unaware"
     }
 
-    def get(self, request):
-        data = RuqyahAssessment.objects.all()
+    def get(self, request, assessment_id=None):
+        if assessment_id is None:
+            # List all assessments
+            data = RuqyahAssessment.objects.all()
 
-        # Make custom appointments object to be used in the template
-        assessments = []
-        for a in data:
-            assessment = dict()
-            assessment['id'] = a.id 
-            assessment['user'] = a.user
-            assessment['appointment'] = a.appointment
-            assessment['age'] = a.age
-            assessment['gender'] = self.GENDER_MAP.get(a.gender)
-            assessment['has_diabetes'] = self.HAS_DIABETES_MAP.get(a.has_diabetes)
-            assessment['blood_pressure'] = self.BLOOD_PRESSURE_MAP.get(a.blood_pressure)
-            assessment['health_issues'] = a.health_issues
-            assessment['bad_dreams'] = a.bad_dreams
-            assessment['anxiety'] = a.anxiety
-            assessment['disappointment'] = a.disappointment
-            assessment['tension'] = a.tension
-            assessment['comments'] = a.comments 
-            assessments.append(assessment)
+            # Prepare custom assessments data for the template
+            assessments = []
+            for a in data:
+                assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'has_diabetes': self.HAS_DIABETES_MAP.get(a.has_diabetes),
+                    'blood_pressure': self.BLOOD_PRESSURE_MAP.get(a.blood_pressure),
+                    'health_issues': a.health_issues,
+                    'bad_dreams': a.bad_dreams,
+                    'anxiety': a.anxiety,
+                    'disappointment': a.disappointment,
+                    'tension': a.tension,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+                assessments.append(assessment)
 
-        return render(request, 'Admin/ruqyah_assessment_data.html', {'assessments': assessments})
+            return render(request, 'Admin/ruqyah_assessment_data.html', {'assessments': assessments})
+
+        else:
+            # Show details of a specific assessment
+            a = get_object_or_404(RuqyahAssessment, id=assessment_id)
+            assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'has_diabetes': self.HAS_DIABETES_MAP.get(a.has_diabetes),
+                    'blood_pressure': self.BLOOD_PRESSURE_MAP.get(a.blood_pressure),
+                    'health_issues': a.health_issues,
+                    'bad_dreams': a.bad_dreams,
+                    'anxiety': a.anxiety,
+                    'disappointment': a.disappointment,
+                    'tension': a.tension,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+            return render(request, 'Admin/ruqyah_assessment_single_view.html', {'assessment': assessment})
+
+    def post(self, request, assessment_id):
+        # Update a specific assessment
+        assessment = get_object_or_404(RuqyahAssessment, id=assessment_id)
+
+        # Get updated data from the form
+        age = request.POST.get('age')
+        has_diabetes = request.POST.get('has_diabetes')
+        blood_pressure = request.POST.get('blood_pressure')
+        health_issues = request.POST.get('health_issues', '').strip()
+        comments = request.POST.get('comments', '').strip()
+
+        # Update the record 
+        assessment.age = age
+        assessment.has_diabetes = has_diabetes
+        assessment.blood_pressure = blood_pressure
+        assessment.health_issues = health_issues
+        assessment.comments = comments
+
+        # Save the updated assessment
+        assessment.save()
+        messages.success(request, "Assessment updated successfully!")
+
+        # Redirect back to the same assessment view
+        return redirect('ruqyah_assessments', assessment_id=assessment.id)
+    
     
 
-# List all counseling assessments
+
 class CounselingAssessmentsView(View):
     GENDER_MAP = {
         1: "Male",
         0: "Female",
     }
 
-    def get(self, request):
-        data = CounselingAssessment.objects.all()
+    def get(self, request, assessment_id=None):
+        if assessment_id is None:
+            # List all assessments
+            data = CounselingAssessment.objects.all()
 
-        # Make custom appointments object to be used in the template
-        assessments = []
-        for a in data:
-            assessment = dict()
-            assessment['id'] = a.id 
-            assessment['user'] = a.user
-            assessment['appointment'] = a.appointment
-            assessment['age'] = a.age
-            assessment['gender'] = self.GENDER_MAP.get(a.gender)
-            assessment['reason'] = a.reason 
-            assessment['comments'] = a.comments 
-            assessments.append(assessment)
+            # Prepare custom assessments data for the template
+            assessments = []
+            for a in data:
+                assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'reason': a.reason,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+                assessments.append(assessment)
 
-        return render(request, 'Admin/counseling_assessment_data.html', {'assessments': assessments})
+            return render(request, 'Admin/counseling_assessment_data.html', {'assessments': assessments})
+
+        else:
+            # Show details of a specific assessment
+            a = get_object_or_404(CounselingAssessment, id=assessment_id)
+            assessment = {
+                    'id': a.id,
+                    'user': a.user,
+                    'appointment': a.appointment,
+                    'age': a.age,
+                    'gender': self.GENDER_MAP.get(a.gender),
+                    'reason': a.reason,
+                    'comments': a.comments,
+                    'submitted_on': a.created_at,
+                }
+            return render(request, 'Admin/counseling_assessment_single_view.html', {'assessment': assessment})
+
+    def post(self, request, assessment_id):
+        # Update a specific assessment
+        assessment = get_object_or_404(CounselingAssessment, id=assessment_id)
+
+        # Get updated data from the form
+        age = request.POST.get('age')
+        reason = request.POST.get('reason', '').strip()
+        comments = request.POST.get('comments', '').strip()
+
+        # Update the record 
+        assessment.age = age
+        assessment.reason = reason
+        assessment.comments = comments
+
+        # Save the updated assessment
+        assessment.save()
+        messages.success(request, "Assessment updated successfully!")
+
+        # Redirect back to the same assessment view
+        return redirect('counseling_assessments', assessment_id=assessment.id)
