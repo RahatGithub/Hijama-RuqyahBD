@@ -19,36 +19,33 @@ class UserListView(ListView):
     template_name = "Admin/users.html"
     context_object_name = "users"
 
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation to get the original context
-    #     context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        # Call the base implementation to get the original context
+        context = super().get_context_data(**kwargs)
 
-    #     # Process the user instances
-    #     custom_users = []
-    #     for user in context["users"]:
+        # Process the user instances
+        custom_users = []
+        for user in context["users"]:
+            normal_assessments = NormalAssessment.objects.filter(user=user.id)
+            hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
+            ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
+            counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
             
-    #         normal_assessments = NormalAssessment.objects.filter(user=user.id)
-    #         hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
-    #         ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
-    #         counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
-            
+            custom_users.append({
+                "id": user.id,
+                "name": user.name,
+                "phone": user.phone,
+                "has_whatsapp": user.has_whatsapp,
+                "address": user.address,
+                "normal_assessments": normal_assessments,
+                "hijama_assessments": hijama_assessments,
+                "ruqyah_assessments": ruqyah_assessments,
+                "counseling_assessments": counseling_assessments
+            })
 
-    #         custom_users.append({
-    #             "id": user.id,
-    #             "name": user.name,
-    #             "phone": user.phone,
-    #             "has_whatsapp": user.has_whatsapp,
-    #             "address": user.address,
-                
-    #         })
-
-    #     # Replace the users context with the processed users
-    #     context["users"] = processed_users
-
-    #     # Add any additional custom context if needed
-    #     context["custom_message"] = "This is a custom message."
-
-    #     return context
+        # Replace the users context with the processed users
+        context["users"] = custom_users
+        return context
 
 
 # Search Users: Display search results based on query
@@ -64,6 +61,27 @@ class UserSearchView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["query"] = self.request.GET.get("query", "")
+
+        custom_users = []
+        for user in context["users"]:
+            normal_assessments = NormalAssessment.objects.filter(user=user.id)
+            hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
+            ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
+            counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
+            
+            custom_users.append({
+                "id": user.id,
+                "name": user.name,
+                "phone": user.phone,
+                "has_whatsapp": user.has_whatsapp,
+                "address": user.address,
+                "normal_assessments": normal_assessments,
+                "hijama_assessments": hijama_assessments,
+                "ruqyah_assessments": ruqyah_assessments,
+                "counseling_assessments": counseling_assessments
+            })
+
+        context["users"] = custom_users
         return context
 
     

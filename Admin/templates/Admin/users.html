@@ -33,6 +33,7 @@
                             <th>Phone</th>
                             <th>Has WhatsApp</th>
                             <th>Address</th>
+                            <th>Assessments</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +44,12 @@
                             <td>{{ user.phone }}</td>
                             <td>{{ user.has_whatsapp|yesno:"Yes,No" }}</td>
                             <td>{{ user.address }}</td>
+                            <td>
+                                Hijama: {% for assessment in user.hijama_assessments %} <a href="/admin/assessments/hijama/{{assessment.id}}">H{{assessment.id}}</a> {% endfor %} <br>
+                                Ruqyah: {% for assessment in user.ruqyah_assessments %} <a href="/admin/assessments/ruqyah/{{assessment.id}}">R{{assessment.id}}</a> {% endfor %} <br>
+                                Counseling: {% for assessment in user.counseling_assessments %} <a href="/admin/assessments/counseling/{{assessment.id}}">C{{assessment.id}}</a> {% endfor %} <br>
+                                Assessment: {% for assessment in user.normal_assessments %} <a href="/admin/assessments/normal/{{assessment.id}}">A{{assessment.id}}</a> {% endfor %} 
+                            </td>
                         </tr>
                         {% empty %}
                         <tr>
