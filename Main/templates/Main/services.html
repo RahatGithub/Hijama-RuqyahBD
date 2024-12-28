@@ -2,93 +2,107 @@
 
 {% block title %}Services{% endblock %}
 
+{% block css %}
+<style> 
+    
+</style>
+{% endblock %}
+
 {% block body %}
-<div class="row row-cols-1 row-cols-md-2">
-    <div class="col mb-4">
-      <div class="card bg-light">
-        <div class="card-body">
-            <h5 class="card-title">হিজামা</h5>
-            <div class="card-group">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">২০০/- <small>প্রতি কাপ (শরীরে)</small></h3>
-                        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+<section class="container mt-5">
+    <h3><i class="bi bi-cursor-fill text-primary"></i> <u class="text-primary">সার্ভিস সমূহ</u></h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4 my-3">
+        <!--Hijama-->
+        <div class="col">
+            <div class="service-card card h-100 shadow mb-5 bg-body rounded">
+                <!--<img src="/media/hijama.jpg" class="card-img-top h-50" alt="...">-->
+                <div class="card-body">
+                    <h4 class="card-title text-center">হিজামা</h4>
+                    <div class="d-flex justify-content-center mt-5 mb-2">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-header bg-secondary text-white">
+                            শরীরে
+                            </div>
+                            <ul class="list-group list-group-flush border border-secondary">
+                                <li class="list-group-item">প্রতি কাপ ২০০/- </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-header bg-secondary text-white">
+                            মাথায়
+                            </div>
+                            <ul class="list-group list-group-flush border border-secondary">
+                                <li class="list-group-item">প্রতি কাপ ৪০০/- </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">৪০০/- <small>প্রতি কাপ (মাথায়)</small></h3>
-                        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                <div class="mt-auto mb-3 d-flex justify-content-center card-footer bg-white border-0">
+                    <a class="btn btn-outline-primary" href="/user-information/?service=hijama&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
+                </div>
+            </div>
+        </div>
+        <!--Ruqyah-->
+        <div class="col">
+            <div class="service-card card h-100 shadow mb-5 bg-body rounded">
+                <!--<img src="/media/ruqyah.jpg" class="card-img-top h-50" alt="...">-->
+                <div class="card-body">
+                    <h4 class="card-title text-center">রুকিয়াহ</h4>
+                    <div class="d-flex justify-content-center mt-5 mb-2">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-header bg-secondary text-white">
+                            সরাসরি 
+                            </div>
+                            <ul class="list-group list-group-flush border border-secondary">
+                                <li class="list-group-item">প্রতি সেশন ২০০০/- </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <a class="btn btn-primary btn-lg" href="/hijama" role="button">বিস্তারিত দেখুন</a>
-            <a class="btn btn-warning btn-lg"  href="/user-information/?service=hijama&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
-        </div>
-      </div>
-    </div>
-    <div class="col mb-4">
-      <div class="card bg-light">
-        <div class="card-body">
-          <h5 class="card-title">রুকিয়াহ</h5>
-          <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">২০০০/- <small>প্রতি সেশন (সরাসরি)</small></h3>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer. This content is a little bit longer. This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-        </div>
-          <a class="btn btn-primary btn-lg" href="/ruqyah" role="button">বিস্তারিত দেখুন</a>
-          <a class="btn btn-warning btn-lg"  href="/user-information/?service=ruqyah&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
-        </div>
-      </div>
-    </div>
-    <div class="col mb-4">
-      <div class="card bg-light">
-        <div class="card-body">
-          <h5 class="card-title">কাউন্সেলিং</h5>
-          <div class="card-group">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">৫০০/- <small>প্রতি সেশন (সরাসরি)</small></h3>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <a class="btn btn-warning btn-lg"  href="/user-information/?service=counseling&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
+                <div class="mt-auto mb-3 d-flex justify-content-center card-footer bg-white border-0">
+                    <a class="btn btn-outline-primary"  href="/user-information/?service=ruqyah&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">৭০০/- <small>প্রতি সেশন (অনলাইন: সর্বোচ্চ ৩০ মিনিট)</small></h3>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    <a class="btn btn-warning btn-lg"  href="/user-information/?service=counseling&appointment_type=online" role="button"> সার্ভিসটি নিতে চাই</a>
-                </div>
-            </div>
-          </div>
-          <a class="btn btn-primary btn-lg" href="/counseling" role="button">বিস্তারিত দেখুন</a>
         </div>
-      </div>
-    </div>
-    <div class="col mb-4">
-      <div class="card bg-light">
-        <div class="card-body">
-          <h5 class="card-title">এসেসমেন্ট</h5>
-          <div class="card-group">
-            <div class="card">
+        <!--Counseling-->
+        <div class="col">
+            <div class="service-card card h-100 shadow mb-5 bg-body rounded">
+                <!--<img src="/media/counseling-2.0.jpeg" class="card-img-top h-50" alt="...">-->
                 <div class="card-body">
-                    <h3 class="card-title">৫০০/- <small>প্রতি সেশন (সরাসরি)</small></h3>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <a class="btn btn-warning btn-lg"  href="/user-information/?service=assessment&appointment_type=live" role="button"> সার্ভিসটি নিতে চাই</a>
+                    <h4 class="card-title text-center">কাউন্সেলিং</h4>
+                    <div class="d-flex justify-content-center mt-5 mb-2">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-header bg-secondary text-white">
+                            সরাসরি
+                            </div>
+                            <ul class="list-group list-group-flush border border-secondary">
+                                <li class="list-group-item">প্রতি সেশন ৫০০/- </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="card text-center" style="width: 18rem;">
+                            <div class="card-header bg-secondary text-white">
+                            অনলাইন
+                            </div>
+                            <ul class="list-group list-group-flush border border-secondary">
+                                <li class="list-group-item">প্রতি সেশন ৭০০/- (সর্বোচ্চ ৩০ মিনিট) </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+                <div class="mt-auto mb-3 d-flex flex-column align-items-center card-footer bg-white border-0">
+                    <a class="btn btn-outline-primary mb-3 px-4 py-2" href="/user-information/?service=ruqyah&appointment_type=live" role="button">
+                        সরাসরি সার্ভিস নিতে চাই
+                    </a>
+                    <a class="btn btn-outline-primary px-4 py-2" href="/user-information/?service=ruqyah&appointment_type=online" role="button">
+                        অনলাইন সার্ভিস নিতে চাই
+                    </a>
+                </div>                
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">৭০০/- <small>প্রতি সেশন (অনলাইন: সর্বোচ্চ ২০ মিনিট)</small></h3>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    <a class="btn btn-warning btn-lg"  href="/user-information/?service=assessment&appointment_type=online" role="button"> সার্ভিসটি নিতে চাই</a>
-                </div>
-            </div>
-            </div>
-          <a class="btn btn-primary btn-lg" href="/assessment" role="button">বিস্তারিত দেখুন</a>
         </div>
-      </div>
     </div>
-  </div>
+</section>
 {% endblock %}

@@ -3,9 +3,6 @@ from django.views import View
 from .models import Assessment as UsualAssessment
 from Main.models import User
 
-class Index(View):
-    def get(self, request):
-        return render(request, 'Assessment/index.html') 
 
 class Assessment(View):
     def get(self, request):

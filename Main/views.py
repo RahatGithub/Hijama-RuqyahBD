@@ -9,7 +9,7 @@ from Assessment.models import Assessment as UsualAssessment
 
 class Index(View):
     def get(self, request):
-        return render(request, 'Main/index.html') 
+        return redirect('/services')
 
 
 class Services(View):
