@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from Main.models import User, Appointment
-from Assessment.models import Assessment as NormalAssessment
 from Hijama.models import Assessment as HijamaAssessment
 from Ruqyah.models import Assessment as RuqyahAssessment
 from Counseling.models import Assessment as CounselingAssessment
@@ -26,7 +25,6 @@ class UserListView(ListView):
         # Process the user instances
         custom_users = []
         for user in context["users"]:
-            normal_assessments = NormalAssessment.objects.filter(user=user.id)
             hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
             ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
             counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
@@ -64,7 +62,6 @@ class UserSearchView(ListView):
 
         custom_users = []
         for user in context["users"]:
-            normal_assessments = NormalAssessment.objects.filter(user=user.id)
             hijama_assessments = HijamaAssessment.objects.filter(user=user.id)
             ruqyah_assessments = RuqyahAssessment.objects.filter(user=user.id)
             counseling_assessments = CounselingAssessment.objects.filter(user=user.id)
@@ -194,72 +191,6 @@ class AppointmentSearchView(ListView):
         context["appointments"] = custom_appointments
         context["query"] = query  # Include search query for template reference
         return context
-
-
-
-# List all normal assessments
-class NormalAssessmentsView(View):
-    GENDER_MAP = {
-        1: "Male",
-        0: "Female",
-    }
-
-    def get(self, request, assessment_id=None):
-        if assessment_id is None:
-            # List all assessments
-            data = NormalAssessment.objects.all()
-
-            # Prepare custom assessments data for the template
-            assessments = []
-            for a in data:
-                assessment = {
-                    'id': a.id,
-                    'user': a.user,
-                    'appointment': a.appointment,
-                    'age': a.age,
-                    'gender': self.GENDER_MAP.get(a.gender),
-                    'reason': a.reason,
-                    'comments': a.comments,
-                    'submitted_on': a.created_at,
-                }
-                assessments.append(assessment)
-
-            return render(request, 'Admin/normal_assessment_data.html', {'assessments': assessments})
-
-        else:
-            # Show details of a specific assessment
-            a = get_object_or_404(NormalAssessment, id=assessment_id)
-            assessment = {
-                    'id': a.id,
-                    'user': a.user,
-                    'appointment': a.appointment,
-                    'age': a.age,
-                    'gender': self.GENDER_MAP.get(a.gender),
-                    'reason': a.reason,
-                    'comments': a.comments,
-                    'submitted_on': a.created_at,
-                }
-            return render(request, 'Admin/normal_assessment_single_view.html', {'assessment': assessment})
-
-    def post(self, request, assessment_id):
-        # Update a specific assessment
-        assessment = get_object_or_404(NormalAssessment, id=assessment_id)
-
-        # Get updated data from the form
-        reason = request.POST.get('reason', '').strip()
-        comments = request.POST.get('comments', '').strip()
-
-        if reason:
-            assessment.reason = reason
-        if comments:
-            assessment.comments = comments
-
-        # Save the updated assessment
-        assessment.save()
-        messages.success(request, "Assessment updated successfully!")
-
-        # Redirect back to the same assessment view
-        return redirect('normal_assessments', assessment_id=assessment.id)
     
 
 

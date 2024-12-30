@@ -14,10 +14,6 @@ urlpatterns = [
     path('appointments/attend/', AttendAppointmentView.as_view(), name='attend_appointment'),
     path('appointments/cancel/', CancelAppointmentView.as_view(), name='cancel_appointment'),
     path('search-appointments/', AppointmentSearchView.as_view(), name='search_appointments'),
-    
-    # normal assessment related paths
-    path('assessments/normal/', NormalAssessmentsView.as_view(), name='normal_assessments'),
-    path('assessments/normal/<int:assessment_id>/', NormalAssessmentsView.as_view(), name='normal_assessments'),
 
     # hijama assessment related paths
     path('assessments/hijama/', HijamaAssessmentsView.as_view(), name='hijama_assessments'),
