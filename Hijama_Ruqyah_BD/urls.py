@@ -27,7 +27,6 @@ urlpatterns = [
     path('hijama/', include('Hijama.urls')),
     path('ruqyah/', include('Ruqyah.urls')),
     path('counseling/', include('Counseling.urls')),
-    path('assessment/', include('Assessment.urls')),
 ]
 
 if settings.DEBUG:
