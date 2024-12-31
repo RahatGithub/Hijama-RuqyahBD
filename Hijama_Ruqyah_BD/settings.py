@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'Hijama.apps.HijamaConfig',
     'Ruqyah.apps.RuqyahConfig',
     'Counseling.apps.CounselingConfig',
-    'Assessment.apps.AssessmentConfig',
-    'Blog.apps.BlogConfig',
     
     # Django default apps:
     'django.contrib.admin',

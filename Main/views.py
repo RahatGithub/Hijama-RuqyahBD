@@ -5,7 +5,6 @@ from .models import *
 from Hijama.models import Assessment as HijamaAssessment
 from Ruqyah.models import Assessment as RuqyahAssessment
 from Counseling.models import Assessment as CounselingAssessment
-from Assessment.models import Assessment as UsualAssessment
 
 class Index(View):
     def get(self, request):
@@ -36,8 +35,6 @@ class BookAppointment(View):
             assessment = RuqyahAssessment.objects.get(id=assessment_id)
         elif service in [31, 32]: #if the service is Counseling:
             assessment = CounselingAssessment.objects.get(id=assessment_id)
-        elif service in [41, 42]: #if the service is Assessment:
-            assessment = UsualAssessment.objects.get(id=assessment_id)
 
         assessment.appointment = appointment
         assessment.save()

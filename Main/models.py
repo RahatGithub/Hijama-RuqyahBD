@@ -26,15 +26,12 @@ class Appointment(BaseModel):
     RUQYAH = 2
     COUNSELING_LIVE = 31
     COUNSELING_ONLINE = 32
-    ASSESSMENT_LIVE = 41
-    ASSESSMENT_ONLINE = 42
+
     SERVICE_CHOICES = [
         (HIJAMA, 'Hijama'),
         (RUQYAH, 'Ruqyah'),
         (COUNSELING_LIVE, 'Counseling Live'),
         (COUNSELING_ONLINE, 'Counseling Online'),
-        (ASSESSMENT_LIVE, 'Assessment Live'),
-        (ASSESSMENT_ONLINE, 'Assessment Online'),
     ]
     service = models.IntegerField(choices=SERVICE_CHOICES)
 
