@@ -35,7 +35,6 @@ class UserListView(ListView):
                 "phone": user.phone,
                 "has_whatsapp": user.has_whatsapp,
                 "address": user.address,
-                "normal_assessments": normal_assessments,
                 "hijama_assessments": hijama_assessments,
                 "ruqyah_assessments": ruqyah_assessments,
                 "counseling_assessments": counseling_assessments
@@ -72,7 +71,6 @@ class UserSearchView(ListView):
                 "phone": user.phone,
                 "has_whatsapp": user.has_whatsapp,
                 "address": user.address,
-                "normal_assessments": normal_assessments,
                 "hijama_assessments": hijama_assessments,
                 "ruqyah_assessments": ruqyah_assessments,
                 "counseling_assessments": counseling_assessments
