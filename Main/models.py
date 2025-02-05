@@ -26,7 +26,6 @@ class Appointment(BaseModel):
     RUQYAH = 2
     COUNSELING_LIVE = 31
     COUNSELING_ONLINE = 32
-
     SERVICE_CHOICES = [
         (HIJAMA, 'Hijama'),
         (RUQYAH, 'Ruqyah'),

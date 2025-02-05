@@ -16,7 +16,7 @@ class Assessment(BaseModel):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='hijama_assessments_appointment', null=True, blank=True)
 
     ##### Personal info: #####
-    name = models.CharField(max_length=100, verbose_name="নাম/Name")
+    # name = models.CharField(max_length=100, verbose_name="নাম/Name")
     age = models.IntegerField(verbose_name="বয়স/Age") 
     # Integer for gender 
     MALE = 1
@@ -34,7 +34,7 @@ class Assessment(BaseModel):
     HIGH = 1
     NORMAL = 0
     LOW = -1
-    UNAWARE = -1
+    UNAWARE = -2
     DIABETES_CHOICES = [
         (HIGH, 'High'),
         (NORMAL, 'Normal'),
@@ -46,7 +46,7 @@ class Assessment(BaseModel):
     HIGH = 1
     NORMAL = 0
     LOW = -1
-    UNAWARE = -1
+    UNAWARE = -2
     BLOOD_PRESSURE_CHOICES = [
         (HIGH, 'High'),
         (NORMAL, 'Normal'),

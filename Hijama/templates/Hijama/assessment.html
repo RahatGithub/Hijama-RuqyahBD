@@ -3,49 +3,289 @@
 {% block title %}Hijama Assessment{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h5 class="text-danger">***this is a dummy hijama assessment form</h5>
-    <form action="" method="POST" style="display: inline;">
+<div class="container my-3 p-4 bg-light">
+    <form method="POST">
       {% csrf_token %}
-        <input type="hidden" id="user" name="user" value="{{request.GET.user}}">
-        <input type="hidden" id="appointment-type" name="appointment-type" value="{{request.GET.appointment_type}}">
-        {% comment %} <input type="hidden" id="service" name="service" value=1> {% endcomment %}
-        <div class="form-group">
-          <label for="age">আপনার বয়স:</label>
-          <input type="number" class="form-control" id="age" name="age">
+      <!-- hidden information -->
+      <input type="hidden" id="user" name="user" value="{{request.GET.user}}">
+      <input type="hidden" id="appointment-type" name="appointment-type" value="{{request.GET.appointment_type}}">
+      <div class="row mb-4">
+        <!-- age -->
+        <div class="col-md-6 form-group">
+            <label for="age">আপনার বয়স/Your age:</label>
+            <input type="number" class="form-control" id="age" name="age">
         </div>
-        <div class="form-group">
-          <label for="gender">আপনার লিঙ্গঃ</label>
+        <!-- gender -->
+        <div class="col-md-6 form-group">
+          <label for="gender">আপনার লিঙ্গ/Your gender:</label>
           <select class="form-control" id="gender" name="gender" required>
-              <option value="" disabled selected>---নির্বাচন করুন---</option>
-              <option value=1>পুরুষ</option>
-              <option value=0>মহিলা</option>
+              <option value="" disabled selected>---নির্বাচন করুন/Select---</option>
+              <option value=1>পুরুষ/Male</option>
+              <option value=0>মহিলা/Female</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="has-diabetes">আপনার কি ডায়াবেটিস আছে?</label>
-          <select class="form-control" id="has-diabetes" name="has-diabetes" required>
-              <option value="" disabled selected>---নির্বাচন করুন---</option>
-              <option value=1>হ্যা</option>
-              <option value=0>না</option>
-              <option value=-1>জানা নেই</option>
+      </div>
+      <!-- address -->
+      <div class="form-group mb-4">
+        <label for="address">ঠিকানা/Address:</label>
+        <input type="text" class="form-control" id="address" name="address">
+      </div>
+      <div class="row mb-4">
+        <!-- diabetes -->
+        <div class="col-md-6 form-group">
+          <label for="diabetes">আপনার শুগার লেভেল বা ডায়াবেটিস/Your sugar level or diabetes:</label>
+          <select class="form-control" id="diabetes" name="diabetes" required>
+              <option value="" disabled selected>---নির্বাচন করুন/Select---</option>
+              <option value=1>উচ্চ/High</option>
+              <option value=0>স্বাভাবিক/Normal</option>
+              <option value=-1>নিম্ন/Low</option>
+              <option value=-2>জানা নেই/Unaware</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="blood-pressure">আপনার ব্লাড প্রেসার কেমন থাকে?</label>
-          <select class="form-control" id="blood-pressure" name="blood-pressure" required>
-              <option value="" disabled selected>---নির্বাচন করুন---</option>
-              <option value=0>স্বাভাবিক</option>
-              <option value=2>উচ্চ</option>
-              <option value=1>নিম্ন</option>
-              <option value=-1>জানা নেই</option>
+        <!-- blood pressure -->
+        <div class="col-md-6 form-group">
+          <label for="blood_pressure">আপনার ব্লাড প্রেশার/Your blood pressure:</label>
+          <select class="form-control" id="blood_pressure" name="blood_pressure" required>
+              <option value="" disabled selected>---নির্বাচন করুন/Select---</option>
+              <option value=1>উচ্চ/High</option>
+              <option value=0>স্বাভাবিক/Normal</option>
+              <option value=-1>নিম্ন/Low</option>
+              <option value=-2>জানা নেই/Unaware</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="health-issues">অন্যান্য শারীরিক/স্বাস্থ্যসংক্রান্ত কোনো সমস্যা থাকলে লিখুন</label>
-          <textarea class="form-control" id="health-issues" name="health-issues" rows="5"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">এপয়েন্টমেন্টের জন্য আবেদন করুন</button>
-      </form>
+      </div>
+      <h4>আপনার ক্ষেত্রে প্রযোজ্য হলে পাশের বক্সে ক্লিক করুন/If appropriate for you then click the box on the side:</h4>
+      <h5><b>***ম্যাডিকেল তথ্য/Medical info:</b><h5>
+      <!-- is_recent_surgery -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_recent_surgery" name="is_recent_surgery" value="true">
+        <label class="form-check-label" for="is_recent_surgery">
+            সম্প্রতি সার্জারি/Recent surgery
+        </label>
+      </div>
+      <!-- is_wounds_take_time -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_wounds_take_time" name="is_wounds_take_time" value="true">
+        <label class="form-check-label" for="is_wounds_take_time">
+            ঘা শুকাতে সময় লাগে/Wounds take time to heal
+        </label>
+      </div>
+      <!-- is_hemophilia -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_hemophilia" name="is_hemophilia" value="true">
+        <label class="form-check-label" for="is_hemophilia">
+            হিমোফিলিয়া/Hemophilia
+        </label>
+      </div>
+      <!-- is_excessive_blood_problems -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_excessive_blood_problems" name="is_excessive_blood_problems" value="true">
+        <label class="form-check-label" for="is_excessive_blood_problems">
+            অতিরিক্ত রক্তপাত সমস্যা/Excessive bleeding problem
+        </label>
+      </div>
+      <!-- is_anemia -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_anemia" name="is_anemia" value="true">
+        <label class="form-check-label" for="is_anemia">
+            অ্যানিমিয়া/Anemia
+        </label>
+      </div>
+      <!-- is_fainting_attacks -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_fainting_attacks" name="is_fainting_attacks" value="true">
+        <label class="form-check-label" for="is_fainting_attacks">
+            অজ্ঞান হওয়া/Fainting attacks
+        </label>
+      </div>
+      <!-- is_black_out -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_black_out" name="is_black_out" value="true">
+        <label class="form-check-label" for="is_black_out">
+            ব্ল্যাক-আউট হওয়া/Blackouts
+        </label>
+      </div>
+      <!-- is_epilepsy -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_epilepsy" name="is_epilepsy" value="true">
+        <label class="form-check-label" for="is_epilepsy">
+            মৃগীরোগ/Epilepsy
+        </label>
+      </div>
+      <!-- is_liver_desease -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_liver_desease" name="is_liver_desease" value="true">
+        <label class="form-check-label" for="is_liver_desease">
+            যকৃত বা লিভারের সমস্যা/Liver deseases
+        </label>
+      </div>
+      <!-- is_kidney_desease -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_kidney_desease" name="is_kidney_desease" value="true">
+        <label class="form-check-label" for="is_kidney_desease">
+            বৃক্ক বা কিডনির সমস্যা/Kedney deseases
+        </label>
+      </div>
+      <!-- is_cardiac_desease -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_cardiac_desease" name="is_cardiac_desease" value="true">
+        <label class="form-check-label" for="is_cardiac_desease">
+            হৃদরোগ বা হার্টের সমস্যা/Heart or cardiac deseases
+        </label>
+      </div>
+      <!-- is_lung_desease -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_lung_desease" name="is_lung_desease" value="true">
+        <label class="form-check-label" for="is_lung_desease">
+            ফুসফুসের সমস্যা/Lung deseases
+        </label>
+      </div>
+      <!-- is_brain_stroke -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_brain_stroke" name="is_brain_stroke" value="true">
+        <label class="form-check-label" for="is_brain_stroke">
+            পূর্বে কখনও ব্রেইন স্ট্রোক হয়েছে/Had a brain stroke earlier
+        </label>
+      </div>
+      <!-- is_blood_thinners -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_blood_thinners" name="is_blood_thinners" value="true">
+        <label class="form-check-label" for="is_blood_thinners">
+            রক্ত হালকা করে এমন ঔষধ নেন/Use blood thinners
+        </label>
+      </div>
+      <!-- is_migraine -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_migraine" name="is_migraine" value="true">
+        <label class="form-check-label" for="is_migraine">
+            মাইগ্রেন/Migraine
+        </label>
+      </div>
+      <!-- is_headache -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_headache" name="is_headache" value="true">
+        <label class="form-check-label" for="is_headache">
+          মাথাব্যথা/Headache
+        </label>
+      </div>
+      <!-- is_back_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_back_pain" name="is_back_pain" value="true">
+        <label class="form-check-label" for="is_back_pain">
+          পিঠ ব্যাথা/Back Pain
+        </label>
+      </div>
+      <!-- is_lower_back_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_lower_back_pain" name="is_lower_back_pain" value="true">
+        <label class="form-check-label" for="is_lower_back_pain">
+          কোমর ব্যথা/Lower Back Pain
+        </label>
+      </div>
+      <!-- is_leg_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_leg_pain" name="is_leg_pain" value="true">
+        <label class="form-check-label" for="is_leg_pain">
+          পায়ে ব্যাথা/Leg Pain
+        </label>
+      </div>
+      <!-- is_shoulder_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_shoulder_pain" name="is_shoulder_pain" value="true">
+        <label class="form-check-label" for="is_shoulder_pain">
+          কাধে ব্যথা/Shoulder Pain
+        </label>
+      </div>
+      <!-- is_elbow_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_elbow_pain" name="is_elbow_pain" value="true">
+        <label class="form-check-label" for="is_elbow_pain">
+          কনুইয়ে ব্যথা/Elbow Pain
+        </label>
+      </div>
+      <!-- is_knee_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_knee_pain" name="is_knee_pain" value="true">
+        <label class="form-check-label" for="is_knee_pain">
+          হাঁটু ব্যথা/Knee Pain
+        </label>
+      </div>
+      <!-- is_wrist_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_wrist_pain" name="is_wrist_pain" value="true">
+        <label class="form-check-label" for="is_wrist_pain">
+          কব্জিতে ব্যথা/Wrist Pain
+        </label>
+      </div>
+      <!-- is_hip_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_hip_pain" name="is_hip_pain" value="true">
+        <label class="form-check-label" for="is_hip_pain">
+          নিতম্বে ব্যথা/Hip Pain
+        </label>
+      </div>
+      <!-- is_ankle_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_ankle_pain" name="is_ankle_pain" value="true">
+        <label class="form-check-label" for="is_ankle_pain">
+          গোড়ালিতে ব্যথা/Ankle Pain
+        </label>
+      </div>
+      <!-- is_fracture_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_fracture_pain" name="is_fracture_pain" value="true">
+        <label class="form-check-label" for="is_fracture_pain">
+          হাড়ের স্থানচ্যুতি জনিত ব্যথা/Fracture Pain
+        </label>
+      </div>
+      <!-- is_gout_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_gout_pain" name="is_gout_pain" value="true">
+        <label class="form-check-label" for="is_gout_pain">
+          জয়েন্টের ব্যথা/Gout Pain
+        </label>
+      </div>
+      <!-- is_heel_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_heel_pain" name="is_heel_pain" value="true">
+        <label class="form-check-label" for="is_heel_pain">
+          পায়ের তালুতে ব্যথা/Heel Pain
+        </label>
+      </div>
+      <!-- is_muscles_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_muscles_pain" name="is_muscles_pain" value="true">
+        <label class="form-check-label" for="is_muscles_pain">
+          মাংসপেশীর ব্যাথা/Muscles Strain
+        </label>
+      </div>
+      <!-- is_arthritis -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_arthritis" name="is_arthritis" value="true">
+        <label class="form-check-label" for="is_arthritis">
+          গেটে বাত বা আর্থ্রাইটিস/Arthritis or Rheumatism
+        </label>
+      </div>
+      <!-- is_osteoporosis -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_osteoporosis" name="is_osteoporosis" value="true">
+        <label class="form-check-label" for="is_osteoporosis">
+          হাড়ের ক্ষয় রোগ/Osteoporosis
+        </label>
+      </div>
+      <!-- is_cancer_pain -->
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="is_cancer_pain" name="is_cancer_pain" value="true">
+        <label class="form-check-label" for="is_cancer_pain">
+          ক্যনসারের ব্যথা/Cancer pain
+        </label>
+      </div>
+
+       
+
+      <h5><b>***শুধুমাত্র মহিলাদের জন্য/Only for women:</b><h5>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 {% endblock %}

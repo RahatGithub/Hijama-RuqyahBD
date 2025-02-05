@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}User List{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">User List</h2>
+    {% comment %} <a href="{% url 'dashboard' %}" class="btn btn-dark mb-4">Back to Dashboard</a> {% endcomment %}
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Has WhatsApp</th>
+                    <th>Address</th>
+                    <th>Assessments</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.has_whatsapp|yesno:"Yes,No" }}</td>
+                    <td>{{ user.address }}</td>
+                    <td>
+                        Hijama: 
+                        {% if user.hijama_assessments %}
+                            {% for assessment in user.hijama_assessments %} 
+                                <a href="/admin/assessments/hijama/{{assessment.id}}">H{{assessment.id}}</a> 
+                            {% endfor %}
+                        {% endif %} 
+                        <br>
+                        Ruqyah: 
+                        {% if user.ruqyah_assessments %}
+                            {% for assessment in user.ruqyah_assessments %} 
+                                <a href="/admin/assessments/ruqyah/{{assessment.id}}">R{{assessment.id}}</a> 
+                            {% endfor %} 
+                        {% endif %} 
+                        <br>
+                        Counseling: 
+                        {% if user.counseling_assessments %}
+                            {% for assessment in user.counseling_assessments %} 
+                            <a href="/admin/assessments/counseling/{{assessment.id}}">C{{assessment.id}}</a> 
+                            {% endfor %} 
+                        {% endif %} 
+                        <br>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %} 
+
+{% block title %}Hijama Assessment{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h5 class="text-danger">***this is a dummy hijama assessment form</h5>
+    <form action="" method="POST" style="display: inline;">
+      {% csrf_token %}
+        <input type="hidden" id="user" name="user" value="{{request.GET.user}}">
+        <input type="hidden" id="appointment-type" name="appointment-type" value="{{request.GET.appointment_type}}">
+        {% comment %} <input type="hidden" id="service" name="service" value=1> {% endcomment %}
+        <div class="form-group">
+          <label for="age">আপনার বয়স:</label>
+          <input type="number" class="form-control" id="age" name="age">
+        </div>
+        <div class="form-group">
+          <label for="gender">আপনার লিঙ্গঃ</label>
+          <select class="form-control" id="gender" name="gender" required>
+              <option value="" disabled selected>---নির্বাচন করুন---</option>
+              <option value=1>পুরুষ</option>
+              <option value=0>মহিলা</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="has-diabetes">আপনার কি ডায়াবেটিস আছে?</label>
+          <select class="form-control" id="has-diabetes" name="has-diabetes" required>
+              <option value="" disabled selected>---নির্বাচন করুন---</option>
+              <option value=1>হ্যা</option>
+              <option value=0>না</option>
+              <option value=-1>জানা নেই</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="blood-pressure">আপনার ব্লাড প্রেসার কেমন থাকে?</label>
+          <select class="form-control" id="blood-pressure" name="blood-pressure" required>
+              <option value="" disabled selected>---নির্বাচন করুন---</option>
+              <option value=0>স্বাভাবিক</option>
+              <option value=2>উচ্চ</option>
+              <option value=1>নিম্ন</option>
+              <option value=-1>জানা নেই</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="health-issues">অন্যান্য শারীরিক/স্বাস্থ্যসংক্রান্ত কোনো সমস্যা থাকলে লিখুন</label>
+          <textarea class="form-control" id="health-issues" name="health-issues" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">এপয়েন্টমেন্টের জন্য আবেদন করুন</button>
+      </form>
+</div>
+{% endblock %}
